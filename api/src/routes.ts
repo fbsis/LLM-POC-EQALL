@@ -11,6 +11,7 @@ router.get('/hello', (req: Request, res: Response) => {
 const calendarController = new CalendarController();
 
 router.get("/calendar", calendarController.getAll);
+router.post("/calendar/sumarize", calendarController.sumarize);
 
 
 export default router;
