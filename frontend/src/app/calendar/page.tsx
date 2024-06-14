@@ -17,14 +17,15 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  CircularProgress
+  CircularProgress,
+  Container,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import MagicWandIcon from "@mui/icons-material/AutoAwesome";
 import useFetchData from "../hooks/useFetchData";
 import { iEvent } from "./iEvent";
-import axios from 'axios';
+import axios from "axios";
 
 function Calendar() {
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
@@ -50,33 +51,41 @@ function Calendar() {
   const handleSummaryRequest = async (event: iEvent) => {
     setLoadingSummary(true);
     try {
-      const response = await axios.post('http://localhost:3001/api/calendar/sumarize', {
-        body: event
-      });
+      const response = await axios.post(
+        "http://localhost:3001/api/calendar/sumarize",
+        {
+          body: event,
+        }
+      );
       setSummary(response.data.result);
     } catch (err) {
-      console.error('Error summarizing event:', err);
-      setSummary('Error summarizing event');
+      console.error("Error summarizing event:", err);
+      setSummary("Error summarizing event");
     } finally {
       setLoadingSummary(false);
     }
   };
-
-  if (loading) {
-    return (<Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-      <CircularProgress />
-    </Box>);
-  }
 
   if (error) {
     return <p>Error: {error}</p>;
   }
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
+    <Container>
+      <Typography variant="h4" >
         Calendar
       </Typography>
+
+      {loading && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <List>
         {data &&
           data.map((event) => (
@@ -110,7 +119,10 @@ function Calendar() {
                         <List sx={{ pl: 2 }}>
                           {event.attendees.map((participant, index) => (
                             <ListItem key={index} alignItems="flex-start">
-                              <ListItemText primary={participant.name} secondary={participant.address} />
+                              <ListItemText
+                                primary={participant.name}
+                                secondary={participant.address}
+                              />
                             </ListItem>
                           ))}
                         </List>
@@ -119,10 +131,12 @@ function Calendar() {
                   </React.Fragment>
                 }
               />
-              <IconButton onClick={() => {
-                handleOpenEvent(event);
-                handleSummaryRequest(event);
-              }}>
+              <IconButton
+                onClick={() => {
+                  handleOpenEvent(event);
+                  handleSummaryRequest(event);
+                }}
+              >
                 <MagicWandIcon />
               </IconButton>
               <IconButton
@@ -146,7 +160,9 @@ function Calendar() {
           aria-labelledby="event-summary-title"
           aria-describedby="event-summary-description"
         >
-          <DialogTitle id="event-summary-title">{openEvent.subject}</DialogTitle>
+          <DialogTitle id="event-summary-title">
+            {openEvent.subject}
+          </DialogTitle>
           <DialogContent>
             {loadingSummary ? (
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -166,7 +182,7 @@ function Calendar() {
           </DialogActions>
         </Dialog>
       )}
-    </Box>
+    </Container>
   );
 }
 

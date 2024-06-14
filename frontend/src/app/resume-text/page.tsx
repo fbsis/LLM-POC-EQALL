@@ -69,6 +69,9 @@ Beyond planning, our firm stands ready to assist in the implementation of the st
 
   return (
     <Box display="flex" flexDirection="column" height="50vh">
+      <Typography variant="h4" >
+        Resume text
+      </Typography>
       <TextareaAutosize
         style={{
           flex: 1,
