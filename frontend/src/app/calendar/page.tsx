@@ -1,4 +1,3 @@
-// pages/calendar.tsx
 "use client";
 import React, { useState } from "react";
 import {
@@ -52,7 +51,7 @@ function Calendar() {
     setLoadingSummary(true);
     try {
       const response = await axios.post('http://localhost:3001/api/calendar/sumarize', {
-        body: event.body
+        body: event
       });
       setSummary(response.data.result);
     } catch (err) {
@@ -63,8 +62,15 @@ function Calendar() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) {
+    return (<Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <CircularProgress />
+    </Box>);
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <Box>
