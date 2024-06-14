@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const API_KEY = "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";
+const API_KEY = "";
 const CHATGPT_URL = "https://api.openai.com/v1/chat/completions";
 
 enum Mode {
