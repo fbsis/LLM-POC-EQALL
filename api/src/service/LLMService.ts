@@ -1,12 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 
-const API_KEY = "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";
+const API_KEY = "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";
 const CHATGPT_URL = "https://api.openai.com/v1/chat/completions";
 
 enum Mode {
   calendar = "calendar",
   resumeText = "resumeText",
 }
+
+const systemMessages: { [key in Mode]: string } = {
+  [Mode.calendar]: "You are a helpful assistant summarizing calendar events concisely. If details are lacking, mention only time and attendees, specifying afternoon or evening. Keep it under 50 words. Do not use markdown, only plain text",
+  [Mode.resumeText]: "You are a professional summarizer. Provide a concise summary of the text in no more than 10 words. Use only simple text",
+};
 
 class LLMService {
   private apiKey: string;
@@ -17,21 +22,15 @@ class LLMService {
     this.url = CHATGPT_URL;
   }
 
-  public async send(content: string, mode: Mode): Promise<AxiosResponse<any>> {
-    let systemMessage: string;
+  public async send(content: string, mode: Mode): Promise<string> {
+    const systemMessage = systemMessages[mode];
 
-    if (mode === Mode.calendar) {
-      systemMessage =
-        "You are a helpful assistant that provides succinct meeting summaries. Create concise and clear summaries of calendar events. Use only simple text (no markdown), remove link saying who will be there";
-    } else if (mode === Mode.resumeText) {
-      systemMessage =
-        "You are a professional summarizer. Provide a concise summary of the text in no more than 10 words. Use only simple text";
-    } else {
+    if (!systemMessage) {
       throw new Error("Unsupported mode");
     }
 
     const requestParams = {
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
