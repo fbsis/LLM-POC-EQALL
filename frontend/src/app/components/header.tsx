@@ -13,7 +13,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import BuildIcon from "@mui/icons-material/Build";
 
-export default function PrimarySearchAppBar() {
+export default function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
